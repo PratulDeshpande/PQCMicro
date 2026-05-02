@@ -1,0 +1,12 @@
+dependencies:
+  idf:
+    version: ">=4.4.0"
+description: "Post-Quantum Cryptography library for ESP32 based on NIST FIPS 203 (ML-KEM) and FIPS 204 (ML-DSA)"
+url: "https://github.com/your-username/PQCMicro"
+version: "1.0.0"
+targets:
+  - esp32
+  - esp32s2
+  - esp32s3
+  - esp32c3
+  - esp32c6
