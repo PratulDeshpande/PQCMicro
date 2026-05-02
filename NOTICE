@@ -1,0 +1,14 @@
+PQCMicro
+Copyright 2026 Pratul Deshpande
+
+This product includes software developed by the PQClean project
+(https://github.com/PQClean/PQClean).
+
+The underlying core cryptographic implementations for ML-KEM (Kyber) and 
+ML-DSA (Dilithium) are derived from PQClean, which is a collaborative 
+effort to provide clean, constant-time implementations of Post-Quantum 
+Cryptography.
+
+Portions of the cryptographic core (such as fips202/Keccak and AES) may 
+be based on public domain or similarly permissively licensed works as 
+cataloged by the PQClean project.

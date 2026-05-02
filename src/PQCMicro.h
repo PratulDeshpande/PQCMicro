@@ -95,6 +95,10 @@ public:
     PQCKyber();
     ~PQCKyber();
 
+    // Prevent Double-Free Heap Corruption (Rule of Three)
+    PQCKyber(const PQCKyber&) = delete;
+    PQCKyber& operator=(const PQCKyber&) = delete;
+
     // ---------------- High-Level Cryptography ----------------
     
     /**
@@ -214,6 +218,10 @@ private:
 public:
     PQCDilithium();
     ~PQCDilithium();
+
+    // Prevent Double-Free Heap Corruption (Rule of Three)
+    PQCDilithium(const PQCDilithium&) = delete;
+    PQCDilithium& operator=(const PQCDilithium&) = delete;
 
     // ---------------- High-Level Cryptography ----------------
     bool generateKeys();

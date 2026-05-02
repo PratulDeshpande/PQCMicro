@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software in your research or commercial project, please cite it using the following metadata."
+title: "PQCMicro: Post-Quantum Cryptography Toolkit for Microcontrollers"
+abstract: "A highly optimized, memory-safe, FreeRTOS-aware C++ library bringing NIST FIPS 203 (ML-KEM) and FIPS 204 (ML-DSA) Post-Quantum Cryptography to resource-constrained IoT devices like the ESP32 and STM32."
+authors:
+  - family-names: "Deshpande"
+    given-names: "Pratul"
+    website: "https://pratuldeshpande.com/"
+version: 1.1.0
+date-released: "2026-05-03"
+license: Apache-2.0
+repository-code: "https://github.com/PratulDeshpande/PQCMicro"
+keywords:
+  - post-quantum-cryptography
+  - iot
+  - esp32
+  - arduino
+  - freertos
+  - ml-kem
+  - ml-dsa
+  - kyber
+  - dilithium

@@ -109,9 +109,12 @@ bool PQCKyber::generateKeys() {
     // Spawn a huge 32KB stack task specifically for the heavy matrix math
     KyberTaskArgs args = {this, xSemaphoreCreateBinary(), NULL, -1, 0};
     xTaskCreatePinnedToCore(kyber_task, "kyber_gen", 32768, &args, 1, NULL, 1);
-    xSemaphoreTake(args.sem, portMAX_DELAY);
+    if (xSemaphoreTake(args.sem, pdMS_TO_TICKS(30000)) == pdTRUE) {
+        res = args.result;
+    } else {
+        res = -1;
+    }
     vSemaphoreDelete(args.sem);
-    res = args.result;
 #else
     // For standard generic boards
     res = MLKEM512::keypair(pk, sk);
@@ -130,9 +133,12 @@ bool PQCKyber::encapsulate(const uint8_t* peer_pk) {
 #if defined(ESP32) || defined(ESP_PLATFORM)
     KyberTaskArgs args = {this, xSemaphoreCreateBinary(), peer_pk, -1, 1};
     xTaskCreatePinnedToCore(kyber_task, "kyber_enc", 32768, &args, 1, NULL, 1);
-    xSemaphoreTake(args.sem, portMAX_DELAY);
+    if (xSemaphoreTake(args.sem, pdMS_TO_TICKS(30000)) == pdTRUE) {
+        res = args.result;
+    } else {
+        res = -1;
+    }
     vSemaphoreDelete(args.sem);
-    res = args.result;
 #else
     res = MLKEM512::encapsulate(ct, ss, peer_pk);
 #endif
@@ -150,9 +156,12 @@ bool PQCKyber::decapsulate(const uint8_t* peer_ct) {
 #if defined(ESP32) || defined(ESP_PLATFORM)
     KyberTaskArgs args = {this, xSemaphoreCreateBinary(), peer_ct, -1, 2};
     xTaskCreatePinnedToCore(kyber_task, "kyber_dec", 32768, &args, 1, NULL, 1);
-    xSemaphoreTake(args.sem, portMAX_DELAY);
+    if (xSemaphoreTake(args.sem, pdMS_TO_TICKS(30000)) == pdTRUE) {
+        res = args.result;
+    } else {
+        res = -1;
+    }
     vSemaphoreDelete(args.sem);
-    res = args.result;
 #else
     res = MLKEM512::decapsulate(ss, peer_ct, sk);
 #endif
@@ -216,6 +225,7 @@ String PQCKyber::getPublicKeyHex() const {
     if (!has_pk) return String();
     char* hexBuf = (char*)malloc(MLKEM512::PUBLICKEYBYTES * 2 + 1);
     bytesToHex(pk, MLKEM512::PUBLICKEYBYTES, hexBuf);
+    hexBuf[MLKEM512::PUBLICKEYBYTES * 2] = '\0';
     String s = String(hexBuf);
     free(hexBuf);
     return s;
@@ -225,6 +235,7 @@ String PQCKyber::getCiphertextHex() const {
     if (!has_ct) return String();
     char* hexBuf = (char*)malloc(MLKEM512::CIPHERTEXTBYTES * 2 + 1);
     bytesToHex(ct, MLKEM512::CIPHERTEXTBYTES, hexBuf);
+    hexBuf[MLKEM512::CIPHERTEXTBYTES * 2] = '\0';
     String s = String(hexBuf);
     free(hexBuf);
     return s;
@@ -346,9 +357,12 @@ bool PQCDilithium::generateKeys() {
 #if defined(ESP32) || defined(ESP_PLATFORM)
     DilithiumTaskArgs args = {this, xSemaphoreCreateBinary(), NULL, 0, NULL, NULL, 0, -1, 0};
     xTaskCreatePinnedToCore(dilithium_task, "dilithium_gen", 49152, &args, 1, NULL, 1);
-    xSemaphoreTake(args.sem, portMAX_DELAY);
+    if (xSemaphoreTake(args.sem, pdMS_TO_TICKS(30000)) == pdTRUE) {
+        res = args.result;
+    } else {
+        res = -1;
+    }
     vSemaphoreDelete(args.sem);
-    res = args.result;
 #else
     res = MLDSA44::keypair(pk, sk);
 #endif
@@ -366,9 +380,12 @@ bool PQCDilithium::sign(const uint8_t* msg, size_t msglen) {
 #if defined(ESP32) || defined(ESP_PLATFORM)
     DilithiumTaskArgs args = {this, xSemaphoreCreateBinary(), msg, msglen, NULL, NULL, 0, -1, 1};
     xTaskCreatePinnedToCore(dilithium_task, "dilithium_sig", 49152, &args, 1, NULL, 1);
-    xSemaphoreTake(args.sem, portMAX_DELAY);
+    if (xSemaphoreTake(args.sem, pdMS_TO_TICKS(30000)) == pdTRUE) {
+        res = args.result;
+    } else {
+        res = -1;
+    }
     vSemaphoreDelete(args.sem);
-    res = args.result;
     siglen = MLDSA44::SIGNATUREBYTES; 
 #else
     res = MLDSA44::sign(sig, &siglen, msg, msglen, sk);
@@ -382,9 +399,12 @@ bool PQCDilithium::verify(const uint8_t* msg, size_t msglen, const uint8_t* peer
 #if defined(ESP32) || defined(ESP_PLATFORM)
     DilithiumTaskArgs args = {this, xSemaphoreCreateBinary(), msg, msglen, peer_pk, signature, signature_len, -1, 2};
     xTaskCreatePinnedToCore(dilithium_task, "dilithium_ver", 49152, &args, 1, NULL, 1);
-    xSemaphoreTake(args.sem, portMAX_DELAY);
+    if (xSemaphoreTake(args.sem, pdMS_TO_TICKS(30000)) == pdTRUE) {
+        res = args.result;
+    } else {
+        res = -1;
+    }
     vSemaphoreDelete(args.sem);
-    res = args.result;
 #else
     res = MLDSA44::verify(signature, signature_len, msg, msglen, peer_pk);
 #endif
@@ -406,6 +426,7 @@ String PQCDilithium::getPublicKeyHex() const {
     if (!has_pk) return String();
     char* hexBuf = (char*)malloc(MLDSA44::PUBLICKEYBYTES * 2 + 1);
     bytesToHex(pk, MLDSA44::PUBLICKEYBYTES, hexBuf);
+    hexBuf[MLDSA44::PUBLICKEYBYTES * 2] = '\0';
     String s = String(hexBuf);
     free(hexBuf);
     return s;
