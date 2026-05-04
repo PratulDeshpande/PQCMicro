@@ -7,7 +7,7 @@
 [![PlatformIO](https://img.shields.io/badge/PlatformIO-Compatible-orange.svg?logo=platformio)](https://platformio.org)
 [![ESP-IDF](https://img.shields.io/badge/ESP--IDF-Native-red.svg?logo=espressif)](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/)
 [![NIST Standards](https://img.shields.io/badge/NIST-FIPS%20203%20%7C%20204-blue)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#)
+[![License: Apache](https://img.shields.io/badge/License-Apache-green.svg)](#)
 
 *Future-proof your IoT devices against quantum computing threats with a simple, memory-safe API.*
 
